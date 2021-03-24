@@ -23,48 +23,41 @@ public class GameService {
         this.gameRepository = gameRepository;
     }
 
-    public Long startnewGame() {
+    public Long startNewGame() {
         Game game = new Game();
         this.gameRepository.save(game);
         return game.getId();
     }
 
     public Progress startNewRound(Long id) {
-        if (gameRepository.findbyId(id).isPresent()){
-            Game game = this.gameRepository.findbyId(id);
-            //lengte op een of andere manier ophalen, en hieronder in de getNextWordLength  plakken
-            String wordToGuess = this.wordService.provideRandomWord(game.getNextWordLength(5));
-            try{
-                game.startNewRound(wordToGuess);
-                return game.getProgress();
-            } catch (Exception e){
-                throw e;
-            }
-        }
-        else {
-            throw new GameNotFoundException();
-        }
+//        if (gameRepository.findById(id).isPresent()){
+//            Game game = this.gameRepository.findById(id);
+//            //lengte op een of andere manier ophalen, en hieronder in de getNextWordLength  plakken
+//            String wordToGuess = this.wordService.provideRandomWord(game.getNextWordLength(5));
+//            try{
+//                game.startNewRound(wordToGuess);
+//                return game.getProgress();
+//            } catch (Exception e){
+//                throw e;
+//            }
+//        }
+//        else {
+//            throw new GameNotFoundException();
+//        }
+
+        return null;
     }
 
     public Progress guessWord(Long id, String guessedWord) {
-        if (gameRepository.findbyId(id).isPresent()){
-            Game game = this.gameRepository.findbyId(id);
-            game.guess(guessedWord);
-            return game.getProgress();
-        }
-        else  {
-            throw new GameNotFoundException();
-        }
+//        if (gameRepository.findById(id).isPresent()){
+//            Game game = this.gameRepository.findById(id);
+//            game.guess(guessedWord);
+//            return game.getProgress();
+//        }
+//        else  {
+//            throw new GameNotFoundException();
+//        }
+        return null;
 
-    }
-
-    public Progress findbyId(Long id) {
-        Game game = this.gameRepository.findbyId(id);
-        return game.getProgress();
-    }
-
-    public Progress findByStatus(GameStatus status) {
-        List<Game> game = this.gameRepository.findByStatus(status);
-        return game.get(0).getProgress();
     }
 }

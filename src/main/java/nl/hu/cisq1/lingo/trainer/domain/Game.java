@@ -66,8 +66,4 @@ public class Game {
     public boolean isPresent() {
         return true;
     }
-
-    public Game get() {
-        return null;
-    }
 }
