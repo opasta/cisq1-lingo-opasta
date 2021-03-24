@@ -51,7 +51,6 @@ Scenario: player cannot guess a word when he lost
     Given the player has lost a game
     Then the player cannot guess a word
 
-
 Scenario: player cannot guess a word when he lost
     Given the player has lost a game
     Then the player cannot guess a word
@@ -61,5 +60,3 @@ Scenario: player cannot guess a word when a new round has not been started
     When the player is trying to guess a word
     Then the word will not be guessed
 
-
-Na een succesvolle raadpoging wordt de score verhoogd
