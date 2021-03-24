@@ -16,7 +16,6 @@ public class Game {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
-    @Lob
     private Long score = 0L;
 
     @Enumerated
@@ -32,8 +31,8 @@ public class Game {
         return new Progress(null, score, null, null, null);
     }
 
-    public long startNewGame() {
-        return Long.parseLong(null);
+    public void startNewGame() {
+
     }
 
     public void startNewRound(String wordToGuess) {
