@@ -1,17 +1,31 @@
 package nl.hu.cisq1.lingo.trainer.domain.rounds;
 
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
+@Entity
 public class Feedback {
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    private Long id;
+    private String attempt;
+
+    @ElementCollection
     private List<Mark> marks;
-    private int attempt;
+
+    public Feedback() {}
+    public Feedback(String attempt, List<Mark> marks){
+        this.attempt = attempt;
+        this.marks = marks;
+    }
 
     public Feedback(List<Mark> marks){
-        this.marks=marks;
+        this.marks = marks;
     }
+
 
     public boolean isWordGuessed() {
         return this.marks.stream()
@@ -23,29 +37,31 @@ public class Feedback {
                 .allMatch(Mark.INVALID::equals);
     }
 
-    public List<Mark> giveHint(int attempt , String wordToGuess, String guessed) {
-        List<String> separateGuessing = new ArrayList<String>(Arrays.asList(guessed.split("(?!^)")));
-        List<String> separateCorrect = new ArrayList<String>(Arrays.asList(wordToGuess.split("(?!^)")));
-        attempt += 1;
-        Mark mark = Mark.INVALID;
-        for (int counter = 0; counter < separateGuessing.size(); counter++){
-            if (separateGuessing.get(counter).equals(separateCorrect.get(counter))){
+    public List<Mark> giveHint(String wordToGuess, String guessed) {
+        List<Mark> marks2 = new ArrayList<Mark>();
+        for (int i = 0; i < stringSplitter(wordToGuess).size(); i++){
+            Mark mark = Mark.INVALID;
+            if (stringSplitter(wordToGuess).get(i).equals(stringSplitter(guessed).get(i))){
                 mark = Mark.CORRECT;
-                //separateGuessing.remove(counter);
-            }
-            marks.add(mark);
+            }else if (null == null){
+                //reden om te kijken of aanwezig
+                mark = Mark.PRESENT;
 
+            }
+            marks2.add(mark);
+            // geen idee waarom ik mark2 moet gebruiken
 
         }
 
         //Loop werkt alleen voor correct & incorrect
         //marks.set(1, Mark.);
 
+        return marks2;
+    }
 
-
-
-
-        return marks;
+    public List<String> stringSplitter(String wordToSplit) {
+        List<String> splittedWord = new ArrayList<String>(Arrays.asList(wordToSplit.split("(?!^)")));
+        return splittedWord;
     }
 
     @Override

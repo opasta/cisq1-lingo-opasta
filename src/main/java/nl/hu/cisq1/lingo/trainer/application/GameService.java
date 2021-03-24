@@ -33,7 +33,7 @@ public class GameService {
         if (gameRepository.findbyId(id).isPresent()){
             Game game = this.gameRepository.findbyId(id);
             //lengte op een of andere manier ophalen, en hieronder in de getNextWordLength  plakken
-            String wordToGuess = this.wordService.provideRandomWord(game.getNextWordLength());
+            String wordToGuess = this.wordService.provideRandomWord(game.getNextWordLength(5));
             try{
                 game.startNewRound(wordToGuess);
                 return game.getProgress();

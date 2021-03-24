@@ -3,6 +3,8 @@ package nl.hu.cisq1.lingo.trainer.domain.rounds;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.List;
 
@@ -62,4 +64,20 @@ class FeedbackTest {
         Feedback feedbackA = new Feedback(List.of(Mark.CORRECT, Mark.CORRECT));
         Assertions.assertFalse(feedbackA.toString().contains(Feedback.class.getName()));
     }
+
+    @Test
+    @DisplayName("Give a hint on a guessed word")
+    void giveHint() {
+        Feedback feedback = new Feedback(List.of(Mark.CORRECT, Mark.CORRECT, Mark.CORRECT, Mark.CORRECT, Mark.CORRECT));
+        //feedback.giveHint("tester", "tester");
+        Assertions.assertTrue(feedback.isWordGuessed());
+
+        //Assertions.assertTrue(feedback.isWordGuessed());
+    }
+
+//    @ParameterizedTest
+//    @MethodSource("provideHintExamples ")
+//    static Stream<Arguments> provideHintExamples() {
+//        return Stream.of(Arguments.of(A, B, C),Arguments.of(D, E, F));
+//    }
 }

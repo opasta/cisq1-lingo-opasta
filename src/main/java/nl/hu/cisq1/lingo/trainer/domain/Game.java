@@ -2,8 +2,12 @@ package nl.hu.cisq1.lingo.trainer.domain;
 
 import lombok.Getter;
 import nl.hu.cisq1.lingo.trainer.domain.rounds.Feedback;
+import nl.hu.cisq1.lingo.trainer.domain.rounds.Round;
+import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -13,8 +17,16 @@ public class Game {
     private Long id;
 
     @Lob
-    private Long score;
+    private Long score = 0L;
 
+    @Enumerated
+    private GameStatus gameStatus = GameStatus.WAITING_FOR_ROUND;
+
+
+    @OneToMany
+    @JoinColumn
+    @Cascade(org.hibernate.annotations.CascadeType.ALL)
+    private final List<Round> rounds = new ArrayList<>();
 
     public Progress getProgress() {
         return new Progress(null, score, null, null, null);

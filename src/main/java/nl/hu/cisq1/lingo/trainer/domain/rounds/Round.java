@@ -2,31 +2,36 @@ package nl.hu.cisq1.lingo.trainer.domain.rounds;
 
 import nl.hu.cisq1.lingo.trainer.domain.Progress;
 
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@Entity
 public class Round {
+    public static final int MAX_ATTEMPTS = 5;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    private Long id;
     private String wordToGuess;
-    private int attempts;
-    private List<Feedback> feedbackHistory = new ArrayList<>();
-    List<Mark> marks =  new ArrayList<>();
-    private List<String> hintHistory = new ArrayList<>();
 
-    public Round(String wordToGuess, int attempts){
+    @OneToMany
+    private final List<Feedback> feedbackHistory = new ArrayList<>();
+
+    public Round(){}
+    public Round(String wordToGuess){
         this.wordToGuess=wordToGuess;
-        this.attempts=attempts;
     }
+
+
+
+
+
 
     public void startNewRound(String wordToGuess) {
 
     }
 
-    public void guess(String word) {
-    //check if possible to guess
-        if (attempts == 5){
 
-        }
-    }
 
     public Progress showProgress() {
 
