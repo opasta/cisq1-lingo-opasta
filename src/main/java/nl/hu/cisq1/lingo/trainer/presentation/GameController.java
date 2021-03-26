@@ -22,12 +22,8 @@ public class GameController {
     }
 
     @PostMapping
-    public Long newGame() {
-        try {
-            return this.gameService.startNewGame();
-        } catch (RoundNotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Already round started");
-        }
+    public Progress newGame() {
+        return this.gameService.startNewGame();
     }
 
     @PostMapping("/{id}/guess")
@@ -35,7 +31,11 @@ public class GameController {
         try {
             return this.gameService.guessWord(id, dto.word);
         } catch (GameNotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No word to guess");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
+
+    // TODO: POST new Round (catch ActionNotAllowed --> 400 CLIENT ERROR , GameNotFound --> 404 NOT FOUND)
+
+    // TODO: GET current progress
 }

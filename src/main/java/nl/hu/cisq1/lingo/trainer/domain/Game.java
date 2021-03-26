@@ -4,6 +4,7 @@ import lombok.Getter;
 import nl.hu.cisq1.lingo.trainer.domain.rounds.Feedback;
 import nl.hu.cisq1.lingo.trainer.domain.rounds.Round;
 import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -21,39 +22,50 @@ public class Game {
     @Enumerated
     private GameStatus gameStatus = GameStatus.WAITING_FOR_ROUND;
 
-
     @OneToMany
     @JoinColumn
-    @Cascade(org.hibernate.annotations.CascadeType.ALL)
+    @Cascade(CascadeType.ALL)
     private final List<Round> rounds = new ArrayList<>();
 
-    public Progress getProgress() {
-        return new Progress(null, score, null, null, null);
-    }
-
-    public void startNewGame() {
-
-    }
-
     public void startNewRound(String wordToGuess) {
+        if (!this.gameStatus.equals(GameStatus.WAITING_FOR_ROUND)) {
+            throw new ActionNotAllowedException();
+        }
 
+        this.rounds.add(new Round(wordToGuess));
+        this.gameStatus = GameStatus.PLAYING;
     }
 
-    public Integer getNextWordLength( int oldLength) {
-        int newLength = oldLength + 1;
-        if (newLength == 8){
+    public Integer getNextWordLength() {
+        int newLength = this.getLastRound().getWordLength() + 1;
+
+        if (newLength == 8 || newLength < 5) {
             newLength = 5;
         }
+
         return newLength;
     }
 
-    public Feedback guess(String word) {
-        return null;
+    private Round getLastRound() {
+        return rounds.get(rounds.size() - 1);
     }
+
+    public void guess(String attempt) {
+        if (!this.gameStatus.equals(GameStatus.PLAYING)) {
+            throw new ActionNotAllowedException();
+        }
+
+        // current round -> guess(attempt)
+        Round round = this.getLastRound();
+
+        // if eliminated --> set status eliminated
+    }
+
 
     public Progress showProgress() {
         return null;
     }
+
 
     public boolean isPlayerEliminated() {
         return true;

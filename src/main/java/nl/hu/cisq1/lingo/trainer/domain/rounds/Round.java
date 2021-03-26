@@ -14,29 +14,31 @@ public class Round {
     private Long id;
     private String wordToGuess;
 
+    private String hint;
+
     @OneToMany
     private final List<Feedback> feedbackHistory = new ArrayList<>();
 
-    public Round(){}
-    public Round(String wordToGuess){
-        this.wordToGuess=wordToGuess;
+    public Round() {
     }
 
-
-
-
-
-
-    public void startNewRound(String wordToGuess) {
-
+    public Round(String wordToGuess) {
+        this.wordToGuess = wordToGuess;
+        this.hint = this.giveInitialHint();
     }
 
-
-
-    public Progress showProgress() {
-
+    private String giveInitialHint() {
         return null;
     }
+
+    public void guess(String attempt) {
+        // Game logic
+    }
+
+    public String getWordToGuess() {
+        return wordToGuess;
+    }
+
 
     public boolean isPlayerEliminated() {
         return true;
@@ -44,5 +46,9 @@ public class Round {
 
     public boolean isPlaying() {
         return true;
+    }
+
+    public int getWordLength() {
+        return wordToGuess.length();
     }
 }

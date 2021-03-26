@@ -22,11 +22,6 @@ public class Feedback {
         this.marks = marks;
     }
 
-    public Feedback(List<Mark> marks){
-        this.marks = marks;
-    }
-
-
     public boolean isWordGuessed() {
         return this.marks.stream()
                 .allMatch(Mark.CORRECT::equals);
@@ -37,31 +32,18 @@ public class Feedback {
                 .allMatch(Mark.INVALID::equals);
     }
 
-    public List<Mark> giveHint(String wordToGuess, String guessed) {
-        List<Mark> marks2 = new ArrayList<Mark>();
-        for (int i = 0; i < stringSplitter(wordToGuess).size(); i++){
-            Mark mark = Mark.INVALID;
-            if (stringSplitter(wordToGuess).get(i).equals(stringSplitter(guessed).get(i))){
-                mark = Mark.CORRECT;
-            }else if (null == null){
-                //reden om te kijken of aanwezig
-                mark = Mark.PRESENT;
+    public String giveHint(String previousHint) {
+        StringBuilder hint = new StringBuilder();
 
+        for (int i = 0; i < previousHint.length(); i++) {
+            if (this.marks.get(i).equals(Mark.CORRECT)) {
+                hint.append(attempt.charAt(i));
+            } else {
+                hint.append(previousHint.charAt(i));
             }
-            marks2.add(mark);
-            // geen idee waarom ik mark2 moet gebruiken
-
         }
 
-        //Loop werkt alleen voor correct & incorrect
-        //marks.set(1, Mark.);
-
-        return marks2;
-    }
-
-    public List<String> stringSplitter(String wordToSplit) {
-        List<String> splittedWord = new ArrayList<String>(Arrays.asList(wordToSplit.split("(?!^)")));
-        return splittedWord;
+        return hint.toString();
     }
 
     @Override
@@ -76,6 +58,7 @@ public class Feedback {
     public int hashCode() {
         return Objects.hash(marks);
     }
+
     @Override
     public String toString() {
         return "Feedback{" +

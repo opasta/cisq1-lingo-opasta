@@ -23,28 +23,30 @@ public class GameService {
         this.gameRepository = gameRepository;
     }
 
-    public Long startNewGame() {
+    public Progress startNewGame() {
+        String wordToGuess = this.wordService.provideRandomWord(5);
+
         Game game = new Game();
+        game.startNewRound(wordToGuess);
         this.gameRepository.save(game);
-        return game.getId();
+
+        return game.showProgress();
     }
 
-    public Progress startNewRound(Long id) {
-//        if (gameRepository.findById(id).isPresent()){
-//            Game game = this.gameRepository.findById(id);
-//            //lengte op een of andere manier ophalen, en hieronder in de getNextWordLength  plakken
-//            String wordToGuess = this.wordService.provideRandomWord(game.getNextWordLength(5));
-//            try{
-//                game.startNewRound(wordToGuess);
-//                return game.getProgress();
-//            } catch (Exception e){
-//                throw e;
-//            }
-//        }
-//        else {
-//            throw new GameNotFoundException();
-//        }
+    public Progress startNewRound(Long gameId) {
+        Game game = getGamebyId(gameId);
 
+        Integer nextLength = game.getNextWordLength();
+        String wordToGuess = this.wordService.provideRandomWord(nextLength);
+        game.startNewRound(wordToGuess);
+        this.gameRepository.save(game);
+
+        return game.showProgress();
+    }
+
+    private Game getGamebyId(Long gameId) {
+//        return this.gameRepository.findById(gameId)
+//                .orElseThrow(()->GameNotFoundException.withId(gameId));
         return null;
     }
 
