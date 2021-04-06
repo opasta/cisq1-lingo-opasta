@@ -24,6 +24,7 @@ public class GameService {
     }
 
     public Progress startNewGame() {
+        //Complete
         String wordToGuess = this.wordService.provideRandomWord(5);
 
         Game game = new Game();
@@ -34,6 +35,7 @@ public class GameService {
     }
 
     public Progress startNewRound(Long gameId) {
+
         Game game = getGamebyId(gameId);
 
         Integer nextLength = game.getNextWordLength();
@@ -45,21 +47,29 @@ public class GameService {
     }
 
     private Game getGamebyId(Long gameId) {
-//        return this.gameRepository.findById(gameId)
-//                .orElseThrow(()->GameNotFoundException.withId(gameId));
-        return null;
+        return this.gameRepository.findById(gameId)
+                .orElseThrow(()->GameNotFoundException.withId(gameId));
     }
 
-    public Progress guessWord(Long id, String guessedWord) {
-//        if (gameRepository.findById(id).isPresent()){
-//            Game game = this.gameRepository.findById(id);
-//            game.guess(guessedWord);
-//            return game.getProgress();
-//        }
-//        else  {
-//            throw new GameNotFoundException();
-//        }
-        return null;
+    public Progress guess(Long gameId, String guessedWord) {
+
+            Game game = this.gameRepository.findById(gameId)
+                    .orElseThrow();
+            //        .orElseThrow(new GameNotFoundException.withId(gameId));
+            //vraag over de withId, die je wilt gooien
+
+            //word eerst nog valideren??
+
+
+            game.guess(guessedWord);
+            this.gameRepository.save(game);
+
+            if (game.getGameStatus().equals(GameStatus.WIN)){
+                //score berekenen
+            }
+
+
+            return game.showProgress();
 
     }
 }

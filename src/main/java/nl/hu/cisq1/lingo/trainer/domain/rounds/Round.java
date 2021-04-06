@@ -1,5 +1,6 @@
 package nl.hu.cisq1.lingo.trainer.domain.rounds;
 
+import nl.hu.cisq1.lingo.trainer.domain.GameStatus;
 import nl.hu.cisq1.lingo.trainer.domain.Progress;
 
 import javax.persistence.*;
@@ -28,27 +29,51 @@ public class Round {
     }
 
     private String giveInitialHint() {
-        return null;
-    }
-
-    public void guess(String attempt) {
-        // Game logic
+        //hint = wordToGuess;
+        StringBuilder firstletter = new StringBuilder();
+        firstletter.append(wordToGuess.substring(0,1));
+        for (int i = 0; i < wordToGuess.length() - 1; i++) {
+            firstletter.append(".");
+        }
+        //feedbackHistory.add(Feedback.)
+        return firstletter.toString();
     }
 
     public String getWordToGuess() {
         return wordToGuess;
     }
 
-
-    public boolean isPlayerEliminated() {
-        return true;
+    public long getAttemptCount() {
+        return feedbackHistory.size();
     }
 
-    public boolean isPlaying() {
-        return true;
+    public List<Mark> getLastFeedback() {
+        return feedbackHistory.get(feedbackHistory.size() - 1).getMarks();
+    }
+
+    public boolean isPlayerEliminated() {
+        return getAttemptCount() > 5;
+    }
+
+    public boolean isPlaying(GameStatus gameStatus) {
+        return gameStatus == GameStatus.PLAYING;
     }
 
     public int getWordLength() {
         return wordToGuess.length();
+    }
+
+    public String getHint() {
+        return hint;
+    }
+
+    @Override
+    public String toString() {
+        return "Round{" +
+                "id=" + id +
+                ", wordToGuess='" + wordToGuess + '\'' +
+                ", hint='" + hint + '\'' +
+                ", feedbackHistory=" + feedbackHistory +
+                '}';
     }
 }

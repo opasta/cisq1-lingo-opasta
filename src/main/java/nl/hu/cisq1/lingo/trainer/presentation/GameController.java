@@ -29,7 +29,7 @@ public class GameController {
     @PostMapping("/{id}/guess")
     public Progress guessWord(@PathVariable Long id, @Valid @RequestBody GuessDto dto) {
         try {
-            return this.gameService.guessWord(id, dto.word);
+            return this.gameService.guess(id, dto.word);
         } catch (GameNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }

@@ -28,9 +28,9 @@ class FeedbackTest {
     }
 
     @Test
-    @DisplayName("Word is invalid if all letters are invalid")
+    @DisplayName("Word is invalid if all letters are ABSENT")
     void wordIsInvalid() {
-        Feedback feedback = new Feedback("woord", List.of(Mark.INVALID, Mark.INVALID, Mark.INVALID, Mark.INVALID, Mark.INVALID));
+        Feedback feedback = new Feedback("woord", List.of(Mark.ABSENT, Mark.ABSENT, Mark.ABSENT, Mark.ABSENT, Mark.ABSENT));
         assertTrue(feedback.isWordInvalid());
     }
 
@@ -91,4 +91,24 @@ class FeedbackTest {
         );
     }
 
+    @ParameterizedTest
+    @DisplayName("give marks, with correctword and the attempt")
+    @MethodSource("wordExamples")
+    void giveMarks(String attempt, List<Mark> marksExpected, String correctWord) {
+        Feedback feedback = new Feedback();
+        List<Mark> marks = feedback.giveMarks(attempt, correctWord);
+        assertEquals(marksExpected, marks);
+    }
+
+    static Stream<Arguments> wordExamples() {
+        return Stream.of(
+
+                Arguments.of("waait", List.of(CORRECT, ABSENT, ABSENT, ABSENT, ABSENT), "woord"),
+                Arguments.of("wierp", List.of(CORRECT, ABSENT, ABSENT, CORRECT, ABSENT), "woord"),
+                Arguments.of("wroeg", List.of(CORRECT, PRESENT, CORRECT, ABSENT, ABSENT), "woord"),
+                Arguments.of("worst", List.of(CORRECT, CORRECT, PRESENT, ABSENT, ABSENT), "woord"),
+                Arguments.of("ooooo", List.of(ABSENT, CORRECT, CORRECT, ABSENT, ABSENT), "woord"),
+                Arguments.of("woord", List.of(CORRECT, CORRECT, CORRECT, CORRECT, CORRECT), "woord")
+        );
+    }
 }
