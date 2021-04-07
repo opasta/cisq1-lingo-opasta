@@ -1,8 +1,9 @@
 package nl.hu.cisq1.lingo.trainer.domain;
 
 import lombok.Getter;
-import nl.hu.cisq1.lingo.trainer.domain.rounds.Feedback;
-import nl.hu.cisq1.lingo.trainer.domain.rounds.Mark;
+import nl.hu.cisq1.lingo.trainer.domain.exceptions.ActionNotAllowedException;
+import nl.hu.cisq1.lingo.trainer.domain.exceptions.GameNotFoundException;
+import nl.hu.cisq1.lingo.trainer.domain.exceptions.InvalidAction;
 import nl.hu.cisq1.lingo.trainer.domain.rounds.Round;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
@@ -32,7 +33,7 @@ public class Game {
 
     public void startNewRound(String wordToGuess) {
         if (!this.gameStatus.equals(GameStatus.WAITING_FOR_ROUND)) {
-            throw new ActionNotAllowedException();
+            throw ActionNotAllowedException.withStatus(this.gameStatus);
         }
 
         this.rounds.add(new Round(wordToGuess));
@@ -54,48 +55,33 @@ public class Game {
     }
 
     public void guess(String attempt) {
-
         if (!this.gameStatus.equals(GameStatus.PLAYING)) {
-            throw new ActionNotAllowedException();
+            throw InvalidAction.cannotGuessWord(this.gameStatus);
         }
 
+        final Round round = this.getCurrentRound();
+        assert round != null;
+        round.guess(attempt);
 
-
-        // current round -> guess(attempt)
-        Round round = this.getLastRound();
-        String correctWord = round.getWordToGuess();
-
-        if (correctWord.length() != attempt.length()) {
-            //wanneer lengte niet toegestaan is
-            throw new ActionNotAllowedException();
-        }
-
-
-        if (correctWord.equals(attempt)){
-            this.gameStatus = GameStatus.WIN;
-        } else {
-
-            Feedback feedback = new Feedback();
-            // bepalen welke letter wel en niet voorkomt
-            List<Mark> marks = feedback.giveMarks(attempt, correctWord);
-
-            //Nu moet er iets met deze letterlijst worden gedaan
-
-            // moet de hint worden gereturned??
-        }
-
-        if (round.isPlayerEliminated() && this.gameStatus == GameStatus.PLAYING){
-            // if eliminated --> set status eliminated
+        if (round.isPlayerEliminated()) {
             this.gameStatus = GameStatus.ELIMINATED;
+        }
 
+        if (round.isWordGuessed()) {
+            this.score += round.calculateScore();
+            this.gameStatus = GameStatus.WIN;
         }
     }
 
-    public Long calculateScore() {
-        Round round = this.getLastRound();
-        score += 5 * (5 - round.getAttemptCount()) + 5;
-        return score;
+    private Round getCurrentRound() {
+        if (rounds.size() == 0){
+            return null;
+        }else {
+            return rounds.get(rounds.size() - 1);
+        }
     }
+
+
 
     public Progress showProgress() {
         //de voortgang terruggeven

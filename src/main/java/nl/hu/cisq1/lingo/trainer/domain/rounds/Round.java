@@ -1,7 +1,6 @@
 package nl.hu.cisq1.lingo.trainer.domain.rounds;
 
 import nl.hu.cisq1.lingo.trainer.domain.GameStatus;
-import nl.hu.cisq1.lingo.trainer.domain.Progress;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -29,14 +28,23 @@ public class Round {
     }
 
     private String giveInitialHint() {
-        //hint = wordToGuess;
         StringBuilder firstletter = new StringBuilder();
         firstletter.append(wordToGuess.substring(0,1));
         for (int i = 0; i < wordToGuess.length() - 1; i++) {
             firstletter.append(".");
         }
-        //feedbackHistory.add(Feedback.)
         return firstletter.toString();
+    }
+
+    public void guess(String attempt) {
+        String correctWord = this.getWordToGuess();
+        Feedback feedback = new Feedback();
+        List<Mark> marks = feedback.giveMarks(attempt, correctWord);
+        feedbackHistory.add(new Feedback(attempt, marks));
+    }
+
+    public int calculateScore() {
+        return 5 * (5 - feedbackHistory.size()) + 5;
     }
 
     public String getWordToGuess() {
@@ -52,7 +60,12 @@ public class Round {
     }
 
     public boolean isPlayerEliminated() {
-        return getAttemptCount() > 5;
+        return getAttemptCount() == 5;
+    }
+
+    public boolean isWordGuessed() {
+        List<Mark> lastFeedback = this.getLastFeedback();
+        return !lastFeedback.contains(Mark.ABSENT) && !lastFeedback.contains(Mark.PRESENT);
     }
 
     public boolean isPlaying(GameStatus gameStatus) {
@@ -76,4 +89,6 @@ public class Round {
                 ", feedbackHistory=" + feedbackHistory +
                 '}';
     }
+
+
 }

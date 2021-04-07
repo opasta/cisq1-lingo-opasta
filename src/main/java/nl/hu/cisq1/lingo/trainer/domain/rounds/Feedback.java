@@ -52,20 +52,6 @@ public class Feedback {
         return hint.toString();
     }
 
-    public String giveFirstLetter(String correctWord, String previousHint) {
-        StringBuilder hint = new StringBuilder();
-
-        for (int i = 0; i < previousHint.length(); i++) {
-            if (this.marks.get(i).equals(Mark.CORRECT)) {
-                hint.append(attempt.charAt(i));
-            } else {
-                hint.append(previousHint.charAt(i));
-            }
-        }
-
-        return hint.toString();
-    }
-
     public List<Mark> giveMarks(String attempt, String correctWord) {
 
         List<Mark> marks = new ArrayList<>();

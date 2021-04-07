@@ -1,4 +1,4 @@
-package nl.hu.cisq1.lingo.trainer.domain;
+package nl.hu.cisq1.lingo.trainer.domain.exceptions;
 
 public class GameNotFoundException extends RuntimeException{
     public GameNotFoundException(String message) {
@@ -9,5 +9,4 @@ public class GameNotFoundException extends RuntimeException{
         String message = String.format("Game with id %d not found.", gameId);
         return new GameNotFoundException(message);
     }
-    //404 error
 }

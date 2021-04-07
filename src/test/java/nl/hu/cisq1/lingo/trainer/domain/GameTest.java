@@ -1,7 +1,11 @@
 package nl.hu.cisq1.lingo.trainer.domain;
 
+import nl.hu.cisq1.lingo.trainer.domain.exceptions.ActionNotAllowedException;
+import nl.hu.cisq1.lingo.trainer.domain.exceptions.InvalidAction;
 import nl.hu.cisq1.lingo.trainer.domain.rounds.Feedback;
 import nl.hu.cisq1.lingo.trainer.domain.rounds.Mark;
+import nl.hu.cisq1.lingo.trainer.domain.rounds.Round;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -17,9 +21,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class GameTest {
 
-    @Test
-    void startNewRound() {
-    }
 
     @ParameterizedTest
     @DisplayName("Calculate next word length")
@@ -39,39 +40,53 @@ class GameTest {
         );
     }
 
-    @Test
-    void guess() {
+    @ParameterizedTest
+    @DisplayName("different gamestatusses")
+    @MethodSource("guessStatus")
+    void gameStatus(String attempt, GameStatus expected) {
+        Game game = new Game();
+        game.startNewRound("tester");
+        game.guess(attempt);
+        assertEquals(game.getGameStatus(), expected);
+    }
+
+    static Stream<Arguments> guessStatus() {
+        return Stream.of(
+                Arguments.of("tester", GameStatus.WIN),
+                Arguments.of("takken", GameStatus.PLAYING)
+        );
     }
 
     @Test
-    void showProgress() {
+    @DisplayName("Gamestatus is not waiting for round, so it will fail")
+    //regels 58 - 60 in Game.java
+    void emptyFeedback() {
+        Game game = new Game();
+        game.startNewRound("tester");
+        game.guess("tester");
+        game.guess("takken");
+
+        Assertions.assertThrows(ActionNotAllowedException.class, () -> {
+
+        });
+
     }
 
-    @Test
-    void isPlayerEliminated() {
+    @ParameterizedTest
+    @DisplayName("is word guessed")
+    @MethodSource("guessWord")
+    void wordGuessed(String attempt, Boolean win) {
+        Round round = new Round("tester");
+        round.guess(attempt);
+        assertEquals(round.isWordGuessed(), win);
     }
 
-    @Test
-    void isPlaying() {
+    static Stream<Arguments> guessWord() {
+        return Stream.of(
+                Arguments.of("tester", true),
+                Arguments.of("takken", false)
+        );
     }
 
-    @Test
-    void isPresent() {
-    }
 
-    @Test
-    void getId() {
-    }
-
-    @Test
-    void getScore() {
-    }
-
-    @Test
-    void getGameStatus() {
-    }
-
-    @Test
-    void getRounds() {
-    }
 }

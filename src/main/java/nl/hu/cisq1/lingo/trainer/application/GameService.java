@@ -2,15 +2,12 @@ package nl.hu.cisq1.lingo.trainer.application;
 
 import nl.hu.cisq1.lingo.trainer.data.SpringGameRepository;
 import nl.hu.cisq1.lingo.trainer.domain.Game;
-import nl.hu.cisq1.lingo.trainer.domain.GameNotFoundException;
-import nl.hu.cisq1.lingo.trainer.domain.GameStatus;
+import nl.hu.cisq1.lingo.trainer.domain.exceptions.GameNotFoundException;
 import nl.hu.cisq1.lingo.trainer.domain.Progress;
 import nl.hu.cisq1.lingo.words.application.WordService;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.List;
-import java.util.Optional;
 
 @Service
 @Transactional
@@ -46,30 +43,17 @@ public class GameService {
         return game.showProgress();
     }
 
-    private Game getGamebyId(Long gameId) {
+    public Game getGamebyId(Long gameId) {
         return this.gameRepository.findById(gameId)
                 .orElseThrow(()->GameNotFoundException.withId(gameId));
     }
 
     public Progress guess(Long gameId, String guessedWord) {
-
-            Game game = this.gameRepository.findById(gameId)
-                    .orElseThrow();
-            //        .orElseThrow(new GameNotFoundException.withId(gameId));
-            //vraag over de withId, die je wilt gooien
-
-            //word eerst nog valideren??
-
-
+            Game game = getGamebyId(gameId);
             game.guess(guessedWord);
+
             this.gameRepository.save(game);
 
-            if (game.getGameStatus().equals(GameStatus.WIN)){
-                //score berekenen
-            }
-
-
             return game.showProgress();
-
     }
 }

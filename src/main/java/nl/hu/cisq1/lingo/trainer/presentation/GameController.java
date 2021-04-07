@@ -1,11 +1,11 @@
 package nl.hu.cisq1.lingo.trainer.presentation;
 
 
+import nl.hu.cisq1.lingo.trainer.domain.Game;
 import nl.hu.cisq1.lingo.trainer.presentation.dto.GuessDto;
 import nl.hu.cisq1.lingo.trainer.application.GameService;
-import nl.hu.cisq1.lingo.trainer.domain.GameNotFoundException;
+import nl.hu.cisq1.lingo.trainer.domain.exceptions.GameNotFoundException;
 import nl.hu.cisq1.lingo.trainer.domain.Progress;
-import nl.hu.cisq1.lingo.trainer.domain.RoundNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -35,7 +35,21 @@ public class GameController {
         }
     }
 
-    // TODO: POST new Round (catch ActionNotAllowed --> 400 CLIENT ERROR , GameNotFound --> 404 NOT FOUND)
+    @PostMapping("/{id}/newRound")
+    public Progress newRound(@PathVariable Long id) {
+        try {
+            return this.gameService.startNewRound(id);
+        } catch (GameNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
+    }
 
-    // TODO: GET current progress
+    @PostMapping("/{id}")
+    public Game getCurrent(@PathVariable Long id) {
+        try {
+            return this.gameService.getGamebyId(id);
+        } catch (GameNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
+    }
 }
