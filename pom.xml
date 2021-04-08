@@ -139,7 +139,7 @@
                                         <limit>
                                             <counter>CLASS</counter>
                                             <value>MISSEDCOUNT</value>
-                                            <maximum>5</maximum>
+                                            <maximum>50</maximum>
                                             // terugzetten naar 0
                                         </limit>
                                     </limits>
