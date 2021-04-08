@@ -17,7 +17,7 @@
     <properties>
         <java.version>11</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <sonar.projectKey>ccb05b9cab1a17fda25a74d20369c7f3c432bc80</sonar.projectKey>
+        <sonar.projectKey>opasta_cisq1-lingo-opasta</sonar.projectKey>
         <sonar.organization>opasta</sonar.organization>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
         <sonar.exclusions>**/LingoApplication.java</sonar.exclusions>
