@@ -31,31 +31,5 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 class WordControllerIntegrationTest {
 
-    @Autowired
-    private MockMvc mockMvc;
 
-    @Test
-    @DisplayName("only supports 5, 6 and 7 letter words")
-    void notSupportedWordLength() throws Exception {
-        RequestBuilder request = MockMvcRequestBuilders
-                .get("/words/random")
-                .param("length", "8");
-
-        mockMvc.perform(request)
-                .andExpect(status().isBadRequest());
-    }
-
-    @Test
-    @DisplayName("provides random 5, 6, and 7 letter words")
-    void provideWords() throws Exception {
-        for (int length = 5; length <= 7; length++) {
-            RequestBuilder request = MockMvcRequestBuilders
-                    .get("/words/random")
-                    .param("length", String.valueOf(length));
-
-            mockMvc.perform(request)
-                    .andExpect(status().isOk())
-                    .andExpect(content().string(hasLength(length)));
-        }
-    }
 }
