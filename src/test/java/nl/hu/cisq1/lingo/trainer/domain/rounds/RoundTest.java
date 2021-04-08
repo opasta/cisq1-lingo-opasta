@@ -52,11 +52,4 @@ class RoundTest {
                 Arguments.of(5, 5)
         );
     }
-
-    @Test
-    @DisplayName("Empty Round is same as empty Round")
-    void emptyRound() {
-        Round roundA = new Round();
-        assertEquals(round, roundA);
-    }
 }

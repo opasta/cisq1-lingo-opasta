@@ -73,13 +73,6 @@ class GameTest {
     }
 
     @Test
-    @DisplayName("Empty Feedback is same as empty feedback")
-    void emptyGame() {
-        Game gameA = new Game();
-        assertEquals(game, gameA);
-    }
-
-    @Test
     @DisplayName("GameStatus is by default WAITING_FOR_ROUND")
     void gameStatus() {
         Game gameA = new Game();
