@@ -3,8 +3,6 @@ package nl.hu.cisq1.lingo.trainer.domain;
 import nl.hu.cisq1.lingo.trainer.domain.exceptions.ActionNotAllowedException;
 import nl.hu.cisq1.lingo.trainer.domain.exceptions.InvalidAction;
 import nl.hu.cisq1.lingo.trainer.domain.rounds.Feedback;
-import nl.hu.cisq1.lingo.trainer.domain.rounds.Mark;
-import nl.hu.cisq1.lingo.trainer.domain.rounds.Round;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -12,21 +10,18 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import java.util.List;
 import java.util.stream.Stream;
 
-import static nl.hu.cisq1.lingo.trainer.domain.rounds.Mark.*;
-import static nl.hu.cisq1.lingo.trainer.domain.rounds.Mark.CORRECT;
 import static org.junit.jupiter.api.Assertions.*;
 
 class GameTest {
-
+    Game game = new Game();
 
     @ParameterizedTest
     @DisplayName("Calculate next word length")
     @MethodSource("getNextWordLength")
     void giveLength(String attempt, int expected) {
-        Game game = new Game();
+
         game.startNewRound(attempt);
         assertEquals(game.getNextWordLength(), expected);
     }
@@ -44,7 +39,6 @@ class GameTest {
     @DisplayName("different gamestatusses")
     @MethodSource("guessStatus")
     void gameStatus(String attempt, GameStatus expected) {
-        Game game = new Game();
         game.startNewRound("tester");
         game.guess(attempt);
         assertEquals(game.getGameStatus(), expected);
@@ -59,34 +53,37 @@ class GameTest {
 
     @Test
     @DisplayName("Gamestatus is not waiting for round, so it will fail")
-    //regels 58 - 60 in Game.java
-    void emptyFeedback() {
-        Game game = new Game();
+    void invalidAction() {
         game.startNewRound("tester");
         game.guess("tester");
-        game.guess("takken");
 
-        Assertions.assertThrows(ActionNotAllowedException.class, () -> {
-
-        });
+        assertThrows(InvalidAction.class,
+                ()->{game.guess("takken");} );
 
     }
 
-    @ParameterizedTest
-    @DisplayName("is word guessed")
-    @MethodSource("guessWord")
-    void wordGuessed(String attempt, Boolean win) {
-        Round round = new Round("tester");
-        round.guess(attempt);
-        assertEquals(round.isWordGuessed(), win);
+    @Test
+    @DisplayName("cannot start a new round when statis is not WAITING_FOR_ROUND")
+    void actionNotAllowed() {
+        game.startNewRound("tester");
+
+        assertThrows(ActionNotAllowedException.class,
+                ()->{game.startNewRound("woordje");;} );
+
     }
 
-    static Stream<Arguments> guessWord() {
-        return Stream.of(
-                Arguments.of("tester", true),
-                Arguments.of("takken", false)
-        );
+    @Test
+    @DisplayName("Empty Feedback is same as empty feedback")
+    void emptyGame() {
+        Game gameA = new Game();
+        assertEquals(game, gameA);
     }
 
+    @Test
+    @DisplayName("GameStatus is by default WAITING_FOR_ROUND")
+    void gameStatus() {
+        Game gameA = new Game();
+        assertEquals(game.getGameStatus(), gameA.getGameStatus());
+    }
 
 }

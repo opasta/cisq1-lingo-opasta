@@ -55,7 +55,7 @@ public class Game {
     }
 
     public void guess(String attempt) {
-        if (!this.gameStatus.equals(GameStatus.PLAYING)) {
+        if (!this.getCurrentRound().isPlaying(this.gameStatus)) {
             throw InvalidAction.cannotGuessWord(this.gameStatus);
         }
 
@@ -80,8 +80,6 @@ public class Game {
             return rounds.get(rounds.size() - 1);
         }
     }
-
-
 
     public Progress showProgress() {
         //de voortgang terruggeven

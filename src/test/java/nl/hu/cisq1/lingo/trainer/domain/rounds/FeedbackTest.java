@@ -13,7 +13,7 @@ import static nl.hu.cisq1.lingo.trainer.domain.rounds.Mark.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 class FeedbackTest {
-     @Test
+    @Test
     @DisplayName("Word is guessed if all letters are correct")
     void wordIsGuessed() {
         Feedback feedback = new Feedback("woord", List.of(CORRECT, CORRECT, CORRECT, CORRECT, CORRECT));

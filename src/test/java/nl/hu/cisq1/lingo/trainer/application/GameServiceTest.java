@@ -15,6 +15,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class GameServiceTest {
 
+
     @Test
     void startNewGame() {
         WordService wordService = mock(WordService.class);
@@ -23,9 +24,12 @@ class GameServiceTest {
         when(wordService.provideRandomWord(anyInt())).thenReturn("appel");
 
         System.out.println(gameService.startNewGame());
+        assertEquals(gameService.startNewGame(), GameService.class);
     }
 
     @Test
+
+    //need to mock default id's for everything
     void startNewRound() {
         WordService wordService = mock(WordService.class);
         SpringGameRepository gameRepository = mock(SpringGameRepository.class);
