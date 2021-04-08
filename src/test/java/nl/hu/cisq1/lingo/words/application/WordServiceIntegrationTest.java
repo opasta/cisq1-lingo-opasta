@@ -25,19 +25,5 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @Import(CiTestConfiguration.class)
 class WordServiceIntegrationTest {
 
-    @Autowired
-    private WordService service;
 
-    @Test
-    @DisplayName("provides random 5, 6 and 7 letter words")
-    void providesRandomWord() {
-        for (int wordLength = 5; wordLength <= 7; wordLength++) {
-            String randomWord = this.service.provideRandomWord(wordLength);
-            assertEquals(wordLength, randomWord.length());
-
-            // Printing is not necessary in most tests
-            // (done here for verification of student configuration)
-            System.out.println("Random word: " + randomWord);
-        }
-    }
 }
