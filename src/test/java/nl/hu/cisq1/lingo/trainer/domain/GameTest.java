@@ -45,6 +45,7 @@ class GameTest {
 
     static Stream<Arguments> guessStatus() {
         return Stream.of(
+                Arguments.of(0, "takken", GameStatus.PLAYING),
                 Arguments.of(1, "tester", GameStatus.WIN),
                 Arguments.of(1, "takken", GameStatus.PLAYING),
                 Arguments.of(5, "takken", GameStatus.ELIMINATED)
@@ -100,5 +101,23 @@ class GameTest {
         Game gameA = new Game();
         assertEquals(game.showProgress().toString(), gameA.showProgress().toString());
     }
+
+    @Test
+    @DisplayName("game showProgress is equal to empty showProgress, also when playingGame")
+    void showProgressPlaying() {
+        Game gameA = new Game();
+        gameA.startNewRound("aapje");
+        game.startNewRound("aapje");
+        assertEquals(game.showProgress().toString(), gameA.showProgress().toString());
+    }
+
+    @Test
+    @DisplayName("set Id test")
+    void setId() {
+        game.setId(1L);
+        assertEquals(game.getId(), 1L);
+    }
+
+
 
 }
