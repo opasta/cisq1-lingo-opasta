@@ -1,6 +1,7 @@
 package nl.hu.cisq1.lingo.trainer.domain.rounds;
 
 import nl.hu.cisq1.lingo.trainer.domain.GameStatus;
+import nl.hu.cisq1.lingo.trainer.domain.exceptions.IncorrectAttemptLength;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -38,6 +39,9 @@ public class Round {
 
     public void guess(String attempt) {
         String correctWord = this.getWordToGuess();
+        if (attempt.length() != correctWord.length()) {
+            throw IncorrectAttemptLength.wordLenght(attempt.length());
+        }
         Feedback feedback = new Feedback();
         List<Mark> marks = feedback.giveMarks(attempt, correctWord);
         feedbackHistory.add(new Feedback(attempt, marks));
@@ -79,16 +83,5 @@ public class Round {
     public String getHint() {
         return hint;
     }
-
-    @Override
-    public String toString() {
-        return "Round{" +
-                "id=" + id +
-                ", wordToGuess='" + wordToGuess + '\'' +
-                ", hint='" + hint + '\'' +
-                ", feedbackHistory=" + feedbackHistory +
-                '}';
-    }
-
 
 }

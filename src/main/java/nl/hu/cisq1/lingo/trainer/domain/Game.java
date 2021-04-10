@@ -2,8 +2,7 @@ package nl.hu.cisq1.lingo.trainer.domain;
 
 import lombok.Getter;
 import nl.hu.cisq1.lingo.trainer.domain.exceptions.ActionNotAllowedException;
-import nl.hu.cisq1.lingo.trainer.domain.exceptions.GameNotFoundException;
-import nl.hu.cisq1.lingo.trainer.domain.exceptions.InvalidAction;
+import nl.hu.cisq1.lingo.trainer.domain.exceptions.IncorrectAttemptLength;
 import nl.hu.cisq1.lingo.trainer.domain.rounds.Round;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
@@ -30,6 +29,7 @@ public class Game {
     @Cascade(CascadeType.ALL)
     private final List<Round> rounds = new ArrayList<>();
 
+    public Game() {}
 
     public void startNewRound(String wordToGuess) {
         if (!this.gameStatus.equals(GameStatus.WAITING_FOR_ROUND)) {
@@ -56,7 +56,7 @@ public class Game {
 
     public void guess(String attempt) {
         if (!this.getCurrentRound().isPlaying(this.gameStatus)) {
-            throw InvalidAction.cannotGuessWord(this.gameStatus);
+            throw ActionNotAllowedException.withStatus(this.gameStatus);
         }
 
         final Round round = this.getCurrentRound();
@@ -82,11 +82,15 @@ public class Game {
     }
 
     public Progress showProgress() {
-        //de voortgang terruggeven
         if (this.gameStatus.equals(GameStatus.PLAYING)) {
             return new Progress(id, score, rounds, gameStatus);
         }
 
         return new Progress(id, score, rounds, gameStatus);
     }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
 }

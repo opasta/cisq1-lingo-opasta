@@ -16,6 +16,8 @@ public class Progress {
     private List<Round> rounds;
     private GameStatus status;
 
+    public Progress(){}
+
     public Progress(Long id, Long score, List<Round> rounds, GameStatus status){
         this.id = id;
         this.score = score;

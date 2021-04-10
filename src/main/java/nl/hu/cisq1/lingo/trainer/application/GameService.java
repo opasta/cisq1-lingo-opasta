@@ -21,7 +21,6 @@ public class GameService {
     }
 
     public Progress startNewGame() {
-        //Complete
         String wordToGuess = this.wordService.provideRandomWord(5);
 
         Game game = new Game();
@@ -32,7 +31,6 @@ public class GameService {
     }
 
     public Progress startNewRound(Long gameId) {
-
         Game game = getGamebyId(gameId);
 
         Integer nextLength = game.getNextWordLength();
@@ -51,9 +49,7 @@ public class GameService {
     public Progress guess(Long gameId, String guessedWord) {
             Game game = getGamebyId(gameId);
             game.guess(guessedWord);
-
             this.gameRepository.save(game);
-
             return game.showProgress();
     }
 }

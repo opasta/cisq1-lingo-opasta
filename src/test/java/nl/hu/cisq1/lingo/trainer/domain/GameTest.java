@@ -1,9 +1,6 @@
 package nl.hu.cisq1.lingo.trainer.domain;
 
 import nl.hu.cisq1.lingo.trainer.domain.exceptions.ActionNotAllowedException;
-import nl.hu.cisq1.lingo.trainer.domain.exceptions.InvalidAction;
-import nl.hu.cisq1.lingo.trainer.domain.rounds.Feedback;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -38,16 +35,19 @@ class GameTest {
     @ParameterizedTest
     @DisplayName("different gamestatusses")
     @MethodSource("guessStatus")
-    void gameStatus(String attempt, GameStatus expected) {
+    void gameStatus(int numberofLoops, String attempt, GameStatus expected) {
         game.startNewRound("tester");
-        game.guess(attempt);
+        for (int i = 0; i < numberofLoops; i++) {
+            game.guess(attempt);
+        }
         assertEquals(game.getGameStatus(), expected);
     }
 
     static Stream<Arguments> guessStatus() {
         return Stream.of(
-                Arguments.of("tester", GameStatus.WIN),
-                Arguments.of("takken", GameStatus.PLAYING)
+                Arguments.of(1, "tester", GameStatus.WIN),
+                Arguments.of(1, "takken", GameStatus.PLAYING),
+                Arguments.of(5, "takken", GameStatus.ELIMINATED)
         );
     }
 
@@ -57,7 +57,7 @@ class GameTest {
         game.startNewRound("tester");
         game.guess("tester");
 
-        assertThrows(InvalidAction.class,
+        assertThrows(ActionNotAllowedException.class,
                 ()->{game.guess("takken");} );
 
     }
@@ -77,6 +77,28 @@ class GameTest {
     void gameStatus() {
         Game gameA = new Game();
         assertEquals(game.getGameStatus(), gameA.getGameStatus());
+    }
+
+
+    @Test
+    @DisplayName("id getter is same as id getter for GAME")
+    void idGetterGame() {
+        Game gameA = new Game();
+        assertEquals(game.getId(), gameA.getId());
+    }
+
+    @Test
+    @DisplayName("round getter is same as round getter")
+    void roundGetter() {
+        Game gameA = new Game();
+        assertEquals(game.getRounds(), gameA.getRounds());
+    }
+
+    @Test
+    @DisplayName("game showProgress is equal to empty showProgress")
+    void showProgress() {
+        Game gameA = new Game();
+        assertEquals(game.showProgress().toString(), gameA.showProgress().toString());
     }
 
 }

@@ -112,6 +112,21 @@ class FeedbackTest {
         );
     }
 
+    @Test
+    @DisplayName("attempt getter is same as attempt getter")
+    void attemptGetter() {
+        Feedback feedbackA = new Feedback();
+        Feedback feedbackB = new Feedback();
+        assertEquals(feedbackA.getAttempt(), feedbackB.getAttempt());
+    }
+
+    @Test
+    @DisplayName("id getter is same as id getter")
+    void idGetter() {
+        Feedback feedbackA = new Feedback();
+        Feedback feedbackB = new Feedback();
+        assertEquals(feedbackA.getId(), feedbackB.getId());
+    }
 
 
 
