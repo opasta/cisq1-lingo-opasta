@@ -51,18 +51,7 @@ class GameTest {
                 Arguments.of(5, "takken", GameStatus.ELIMINATED)
         );
     }
-
-    @Test
-    @DisplayName("Gamestatus is not waiting for round, so it will fail")
-    void invalidAction() {
-        game.startNewRound("tester");
-        game.guess("tester");
-
-        assertThrows(ActionNotAllowedException.class,
-                ()->{game.guess("takken");} );
-
-    }
-
+    
     @Test
     @DisplayName("cannot start a new round when statis is not WAITING_FOR_ROUND")
     void actionNotAllowed() {
