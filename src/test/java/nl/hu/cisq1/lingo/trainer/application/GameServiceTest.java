@@ -47,15 +47,18 @@ class GameServiceTest {
     @DisplayName("starting a new round, so length of rounds should increase by 1")
     void startRound() {
         SpringGameRepository gameRepository = mock(SpringGameRepository.class);
+        WordService wordService = mock(WordService.class);
+        GameService gameService = new GameService(wordService, gameRepository);
+        when(wordService.provideRandomWord(anyInt())).thenReturn("appel");
 
         Game game = new Game();
+        game.setId(1L);
         game.startNewRound("tester");
         when(gameRepository.findById(anyLong())).thenReturn(Optional.of(game));
-
-        assertEquals(game.getRounds().size(), 1);
+        gameService.startNewRound(1L);
+        assertEquals(game.getRounds().size(), 2);
 
     }
-
     @Test
     @DisplayName("when i get a game by id, I should get a game; and the Id should be equal to the one given")
     void getById() {

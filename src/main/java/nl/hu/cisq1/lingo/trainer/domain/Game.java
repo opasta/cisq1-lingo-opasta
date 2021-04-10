@@ -32,10 +32,6 @@ public class Game {
     public Game() {}
 
     public void startNewRound(String wordToGuess) {
-        if (!this.gameStatus.equals(GameStatus.WAITING_FOR_ROUND)) {
-            throw ActionNotAllowedException.withStatus(this.gameStatus);
-        }
-
         this.rounds.add(new Round(wordToGuess));
         this.gameStatus = GameStatus.PLAYING;
     }
