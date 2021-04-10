@@ -95,4 +95,12 @@ public class Feedback {
         return Objects.hash(marks);
     }
 
+    @Override
+    public String toString() {
+        return "Feedback{" +
+                "marks=" + marks +
+                "attempt: " + attempt +
+                "}";
+    }
+
 }

@@ -84,4 +84,13 @@ public class Round {
         return hint;
     }
 
+    @Override
+    public String toString() {
+        return "Round{" +
+                "id=" + id +
+                ", wordToGuess='" + wordToGuess + '\'' +
+                ", hint='" + hint + '\'' +
+                ", feedbackHistory=" + feedbackHistory +
+                '}';
+    }
 }
